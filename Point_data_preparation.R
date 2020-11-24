@@ -4,7 +4,7 @@ library(raster);library(rgdal);library(rgeos)
 
 #set paths to files that will be used (species list available in Supplementary Information)
 
-wd_points <- "C:/Users/ca13kute/Documents/bRacatus/bRacatus_data/GBIF_occurrence"
+wd_points <- "C:/Users/ca13kute/Documents/bRacatus/bRacatus_data/GBIF_occurrence_not_process"
 
 #import GBIF point records
 
@@ -34,20 +34,11 @@ for(i in 1:length(gbif_sp))
 
 #rarefy points, keeping one per grid cell (0.5 degree)
 
-setwd(paste0(wd,"/01_projects/eduardo/ID_raster"))
+setwd("C:/Users/ca13kute/Documents/bRacatus/bRacatus_data")
 
 ID_raster <- raster("ID_raster.img")  #load raster with cell IDs
 
 gbif_ID <- lapply(gbif_sp,function(x){extract(ID_raster,x)}) #extract cell ID from each gbif record
-
-#### same as before but in for loop ###
-
-gbif_ID <- list()
-for(i in 1:length(gbif_sp))
-{
-  gbif_ID[[i]] <- extract(ID_raster,gbif_sp[[i]])
-  print(i)
-}
 
 gbif5 <- list()
 i=1
@@ -55,19 +46,17 @@ for(i in 1:length(gbif4))
 {
   gbif5[[i]] <- cbind(gbif4[[i]],gbif_ID[[i]])
   names(gbif5[[i]])[5] <- "cell_ID"
-  print(i)
 }
 
 gbif6 <- lapply(gbif5,function(x){x[!duplicated(x$cell_ID),]})
 
 ### save rarefied version of the datasets
 
-setwd(paste0(wd,"/01_projects/eduardo/gbif_raw/Species_occurrences_unique_cell"))
+setwd("C:/Users/ca13kute/Documents/bRacatus/bRacatus_data/GBIF_occurrence_unique_cell")
 
 for(i in 1:length(gbif6))
 {
-  saveRDS(gbif6[[i]],names(gbif6)[i])
-  print(i)
+  saveRDS(gbif6[[i]],sps_gbif[i])
 }
 
 #load suitability maps for each species in its native range
