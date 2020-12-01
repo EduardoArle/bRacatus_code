@@ -1,5 +1,5 @@
 #load necessary packages
-
+#
 library(raster);library(rgdal);library(rgeos);library(rworldmap)
 
 #set paths to files that will be used (species list available in Supplementary Information)
